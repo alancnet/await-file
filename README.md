@@ -1,4 +1,4 @@
-# async-file
+# await-file
 Adapts the Node.js File System API (fs) for use with TypeScript async/await
 
 This package makes it easier to access the Node.js file system using [TypeScript](http://www.typescriptlang.org/) and [async/await](https://blogs.msdn.microsoft.com/typescript/2015/11/03/what-about-asyncawait/).

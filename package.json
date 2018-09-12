@@ -1,14 +1,14 @@
 {
   "name": "async-file",
-  "version": "2.1.0",
-  "description": "Adapts the Node.js File System API (fs) for use with TypeScript async/await",
+  "version": "2.2.0",
+  "description": "Adapts the Node.js File System API (fs) for use with async/await",
   "main": "index.js",
   "scripts": {
     "test": "mocha"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/davetemplin/async-file.git"
+    "url": "git+https://github.com/alancnet/await-file.git"
   },
   "keywords": [
     "async",
@@ -17,18 +17,20 @@
     "promise",
     "promisify",
     "file",
-    "fs"
+    "fs",
+    "copyfile",
+    "mkdirp"
   ],
   "author": {
-    "name": "Dave Templin",
-    "email": "davetemplin@hotmail.com",
-    "url": "https://github.com/davetemplin/"
+    "name": "Alan Colon",
+    "email": "npm@alanc.net",
+    "url": "https://github.com/alancnet/"
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/davetemplin/async-file/issues"
+    "url": "https://github.com/alancnet/await-file/issues"
   },
-  "homepage": "https://github.com/davetemplin/async-file#readme",
+  "homepage": "https://github.com/alancnet/await-file#readme",
   "devDependencies": {
     "@types/chai": "^4.0.4",
     "@types/mocha": "^2.2.43",

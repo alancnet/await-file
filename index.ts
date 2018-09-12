@@ -118,6 +118,9 @@ export function write(fd: number, buffer: Buffer, offset: number, length: number
 export function write(fd: number, data: any, offset?: number, encoding?: Encoding): Promise<{written: number, buffer: Buffer}>;
 export function write(fd: number) { return promisify<{written: number; buffer: Buffer}>(fs.write, arguments, null, function () { return { written: <number>arguments[1], buffer: <Buffer>arguments[2] }; }); }
 
+export function copyFile(src: string|Buffer, dest: string|Buffer, flags?: any)
+    { return promisify<any>(fs.copyFile, arguments); }
+
 export function writeFile(file: string|number, data: string|any, 
     options?: { 
         encoding?: Encoding; 

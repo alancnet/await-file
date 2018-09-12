@@ -1,11 +1,10 @@
-"use strict";
 // Project: https://github.com/davetemplin/async-file/
 // Written by: Dave Templin <https://github.com/davetemplin/>
-Object.defineProperty(exports, "__esModule", { value: true });
-const fs = require("fs");
-const pathutil = require("path");
-const rimraf = require("rimraf");
-var fs_1 = require("fs");
+"use strict";
+var fs = require('fs');
+var pathutil = require('path');
+var rimraf = require('rimraf');
+var fs_1 = require('fs');
 exports.createReadStream = fs_1.createReadStream;
 exports.createWriteStream = fs_1.createWriteStream;
 exports.watch = fs_1.watch;
@@ -37,7 +36,11 @@ exports.WriteStream = fs_1.WriteStream;
  * Instead, user code should open/read/write the file directly and handle the error raised if the file is not accessible.
  */
 function access(path, mode) {
-    return new Promise(resolve => fs.access(path, mode, err => !err ? resolve(true) : resolve(false)));
+    return new Promise(function (resolve) {
+        return fs.access(path, mode, function (err) {
+            return !err ? resolve(true) : resolve(false);
+        });
+    });
 }
 exports.access = access;
 function appendFile(file, data, options) { return promisify(fs.appendFile, arguments); }
@@ -51,7 +54,7 @@ exports.close = close;
 /**
  * Convenience method to end a writable stream returning a promise.
  */
-function end(w, chunk, encoding) { return new Promise(resolve => w.end(chunk, encoding, () => resolve())); }
+function end(w, chunk, encoding) { return new Promise(function (resolve) { return w.end(chunk, encoding, function () { return resolve(); }); }); }
 exports.end = end;
 function fchmod(fd, mode) { return promisify(fs.fchmod, arguments); }
 exports.fchmod = fchmod;
@@ -130,6 +133,8 @@ function utimes(path, atime, mtime) { return promisify(fs.utimes, arguments); }
 exports.utimes = utimes;
 function write(fd) { return promisify(fs.write, arguments, null, function () { return { written: arguments[1], buffer: arguments[2] }; }); }
 exports.write = write;
+function copyFile(src, dest, flags) { return promisify(fs.copyFile, arguments); }
+exports.copyFile = copyFile;
 function writeFile(file, data, options) { return promisify(fs.writeFile, arguments); }
 exports.writeFile = writeFile;
 function readTextFile(file, encoding, flags) {
@@ -152,34 +157,52 @@ function writeTextFile(file, data, encoding, flags, mode) {
         return promisify(fs.writeFile, [file, data, options]);
 }
 exports.writeTextFile = writeTextFile;
-function createDirectory(path, mode = 0o777) {
-    return new Promise((resolve, reject) => mkdirp(path, mode, err => !err ? resolve() : reject(err)));
+function createDirectory(path, mode) {
+    if (mode === void 0) { mode = 511; }
+    return new Promise(function (resolve, reject) {
+        return mkdirp(path, mode, function (err) {
+            return !err ? resolve() : reject(err);
+        });
+    });
 }
 exports.createDirectory = createDirectory;
 exports.mkdirp = createDirectory;
 function del(path) {
-    return new Promise((resolve, reject) => rimraf(path, err => !err ? resolve() : reject(err)));
+    return new Promise(function (resolve, reject) {
+        return rimraf(path, function (err) {
+            return !err ? resolve() : reject(err);
+        });
+    });
 }
 exports.delete = del;
 exports.rimraf = del;
 function exists(path) {
-    return new Promise((resolve, reject) => fs.lstat(path, err => !err ? resolve(true) : err.code === 'ENOENT' ? resolve(false) : reject(err)));
+    return new Promise(function (resolve, reject) {
+        return fs.lstat(path, function (err) {
+            return !err ? resolve(true) : err.code === 'ENOENT' ? resolve(false) : reject(err);
+        });
+    });
 }
 exports.exists = exists;
-function mkdirp(path, mode = 0o777, done) {
+function mkdirp(path, mode, done) {
+    if (mode === void 0) { mode = 511; }
     path = pathutil.resolve(path);
-    fs.mkdir(path, mode, err => {
+    fs.mkdir(path, mode, function (err) {
         if (!err)
             done(null);
         else if (err.code === 'ENOENT')
-            mkdirp(pathutil.dirname(path), mode, err => !err ? mkdirp(path, mode, done) : done(err));
+            mkdirp(pathutil.dirname(path), mode, function (err) {
+                return !err ? mkdirp(path, mode, done) : done(err);
+            });
         else
-            fs.stat(path, (err, stat) => err ? done(err) : !stat.isDirectory() ? done(new Error(path + ' is already a file')) : done(null));
+            fs.stat(path, function (err, stat) {
+                return err ? done(err) : !stat.isDirectory() ? done(new Error(path + ' is already a file')) : done(null);
+            });
     });
 }
 function promisify(target, args, context, resolver) {
-    return new Promise((resolve, reject) => {
-        target.apply(context, Array.prototype.slice.call(args).concat([(err, result) => {
+    return new Promise(function (resolve, reject) {
+        target.apply(context, Array.prototype.slice.call(args).concat([function (err, result) {
                 if (err)
                     reject(err);
                 else if (resolver)
@@ -189,4 +212,3 @@ function promisify(target, args, context, resolver) {
             }]));
     });
 }
-//# sourceMappingURL=index.js.map
